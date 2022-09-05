@@ -20,14 +20,14 @@ public class ConnectionPool {
 	private static HikariDataSource ds;
 	static {
 		try(InputStream input = Files.newInputStream(Paths.get("src/main/resources/datasource.properties"))) {
-			// Configure Hikari DataSource
+
 			Properties prop = new Properties();
 			prop.load(input);
 			HikariConfig config = new HikariConfig(prop);
 			ds = new HikariDataSource(config);
 
 		} catch (IOException e) {
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 

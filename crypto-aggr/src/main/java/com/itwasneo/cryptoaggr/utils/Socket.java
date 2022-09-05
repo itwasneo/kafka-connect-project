@@ -27,12 +27,13 @@ public class Socket {
 
 	@OnWebSocketMessage
 	public void onText(Session session, String message) {
-		try (Connection c = ConnectionPool.getConnection()) {
+		try (Connection c = ConnectionPool.getConnection();
+			 PreparedStatement st = c.prepareStatement(INSERT_SCRIPT)) {
+
 			ObjectReader or = objectMapper.readerFor(Payload.class);
 			Payload p = or.readValue(message);
 			LinkedHashMap<String, Object> data = (LinkedHashMap<String, Object>) p.data;
 
-			PreparedStatement st = c.prepareStatement(INSERT_SCRIPT);
 			st.setLong(1, System.currentTimeMillis());
 			st.setLong(2, (long) data.get("E"));
 			st.setString(3, (String) data.get("s"));
