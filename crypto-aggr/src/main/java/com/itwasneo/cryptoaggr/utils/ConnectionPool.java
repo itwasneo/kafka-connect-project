@@ -19,7 +19,7 @@ public class ConnectionPool {
 
 	private static HikariDataSource ds;
 	static {
-		try(InputStream input = Files.newInputStream(Paths.get("src/main/resources/datasource.properties"))) {
+		try(InputStream input = Files.newInputStream(Paths.get("config/datasource.properties"))) {
 
 			Properties prop = new Properties();
 			prop.load(input);

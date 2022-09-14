@@ -1,6 +1,5 @@
 package com.itwasneo.cryptoaggr.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
@@ -8,7 +7,6 @@ import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.List;
 
 public class Client {
 
@@ -28,7 +26,7 @@ public class Client {
 			ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
 			ClientMessage msg = new ClientMessage(
 					"SUBSCRIBE",
-					List.of("btcusdt@miniTicker"),
+					new String[]{"btcusdt@miniTicker"},
 					1
 			);
 			socket.sendMessage(ow.writeValueAsString(msg));
@@ -41,11 +39,11 @@ public class Client {
 	static class ClientMessage implements Serializable {
 		public String method;
 
-		public List<String> params;
+		public String[] params;
 
 		public Integer id;
 
-		public ClientMessage(String method, List<String> params, Integer id) {
+		public ClientMessage(String method, String[] params, Integer id) {
 			this.method = method;
 			this.params = params;
 			this.id = id;

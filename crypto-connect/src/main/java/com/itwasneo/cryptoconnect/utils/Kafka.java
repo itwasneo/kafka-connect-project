@@ -27,7 +27,7 @@ public class Kafka {
 	private static Consumer<String, GenericRecord> consumer;
 	// CONFIGURATION
 	static {
-		try(InputStream input = Files.newInputStream(Paths.get("src/main/resources/kafka.properties"))) {
+		try(InputStream input = Files.newInputStream(Paths.get("config/kafka.properties"))) {
 
 			// Collect properties from kafka.properties file.
 			Properties p = new Properties();
