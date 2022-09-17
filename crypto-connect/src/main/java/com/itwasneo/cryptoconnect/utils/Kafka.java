@@ -1,6 +1,8 @@
 package com.itwasneo.cryptoconnect.utils;
 
+import com.itwasneo.cryptoconnect.CryptoConnectApplication;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.javalin.http.sse.SseClient;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -55,8 +57,6 @@ public class Kafka {
 			// Subscribe to topics inside the property file.
 			consumer.subscribe(Collections.singletonList(p.getProperty("topic")));
 
-			startConsumer();
-
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);
@@ -88,6 +88,10 @@ public class Kafka {
 							pst.setString(7, message.get("volume").toString());
 							int dmlExecuted = pst.executeUpdate();
 							logger.info("INSERTED {} ROW", dmlExecuted);
+
+							for (SseClient client : CryptoConnectApplication.CLIENTS) {
+								client.sendEvent(new Event(System.currentTimeMillis(), message.get("pair").toString(), message.get("close").toString()));
+							}
 						}
 
 					} catch(Exception e) {
